@@ -39,9 +39,10 @@ app.register_blueprint(auth_bp, url_prefix='/api/auth')
 jwt = JWTManager(app)
 bcrypt.init_app(app)
 
+# Initialize database tables (works with Gunicorn)
+with app.app_context():
+    db.create_all()
 
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()
     port = int(os.environ.get('PORT', 8000))
     app.run(debug=False, host='0.0.0.0', port=port)

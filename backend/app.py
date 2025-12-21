@@ -13,7 +13,9 @@ load_dotenv()
 
 app = Flask(__name__)
 # Standard CORS setup (Broad but robust for dev)
-CORS(app, supports_credentials=True, origins="*")
+CORS(app, supports_credentials=True, origins="*", 
+     allow_headers=["Content-Type", "Authorization"],
+     methods=["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"])
 
 
 @app.after_request
@@ -21,6 +23,34 @@ def add_cors_headers(response):
     response.headers['Access-Control-Allow-Origin'] = '*'
     response.headers['Access-Control-Allow-Headers'] = 'Content-Type,Authorization'
     response.headers['Access-Control-Allow-Methods'] = 'GET,PUT,POST,DELETE,PATCH,OPTIONS'
+    return response
+
+
+# Error handlers with CORS headers
+@app.errorhandler(500)
+def handle_500(e):
+    from flask import jsonify
+    response = jsonify({'error': 'Internal server error', 'message': str(e)})
+    response.status_code = 500
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
+
+@app.errorhandler(400)
+def handle_400(e):
+    from flask import jsonify
+    response = jsonify({'error': 'Bad request', 'message': str(e)})
+    response.status_code = 400
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    return response
+
+
+@app.errorhandler(404)
+def handle_404(e):
+    from flask import jsonify
+    response = jsonify({'error': 'Not found', 'message': str(e)})
+    response.status_code = 404
+    response.headers['Access-Control-Allow-Origin'] = '*'
     return response
 
 # Configuration

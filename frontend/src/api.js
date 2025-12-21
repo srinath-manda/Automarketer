@@ -1,7 +1,12 @@
 import axios from 'axios';
 
+// Determine if we're in production (deployed on Vercel) or development
+const isProduction = window.location.hostname !== 'localhost';
+const PRODUCTION_API = 'https://automarketer-backend-2mz4.onrender.com/api';
+const DEVELOPMENT_API = 'http://localhost:8000/api';
+
 const api = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000/api',
+    baseURL: isProduction ? PRODUCTION_API : DEVELOPMENT_API,
     headers: {
         'Content-Type': 'application/json',
     },

@@ -1,0 +1,21 @@
+
+@api_bp.route('/business/<int:id>', methods=['PUT', 'PATCH'])
+@jwt_required()
+def update_business(id):
+    current_user_id = get_jwt_identity()
+    business, error_resp, code = verify_business_access(id, int(current_user_id))
+    if error_resp:
+        return error_resp, code
+    
+    data = request.json
+    if 'name' in data:
+        business.name = data['name']
+    if 'description' in data:
+        business.description = data['description']
+    if 'industry' in data:
+        business.industry = data['industry']
+    if 'target_audience' in data:
+        business.target_audience = data['target_audience']
+        
+    db.session.commit()
+    return jsonify(business.to_dict())

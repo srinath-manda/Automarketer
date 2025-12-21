@@ -1,0 +1,16 @@
+duckduckgo-search
+gTTS
+flask
+flask-cors
+flask-sqlalchemy
+google-generativeai
+python-dotenv
+huggingface_hub>=0.20.0
+pytrends
+flask-jwt-extended
+flask-bcrypt
+Flask-Limiter
+email-validator
+gunicorn
+requests
+waitress

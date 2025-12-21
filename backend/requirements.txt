@@ -14,3 +14,5 @@ email-validator
 gunicorn
 requests
 waitress
+moviepy
+Pillow

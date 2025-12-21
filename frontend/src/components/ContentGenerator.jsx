@@ -3,6 +3,11 @@ import api from '../api';
 import { useNavigate } from 'react-router-dom';
 import { useLanguage } from '../context/LanguageContext';
 
+// Determine if we're in production or development
+const isProduction = window.location.hostname !== 'localhost';
+const API_BASE_URL = isProduction
+    ? 'https://automarketer-backend-2mz4.onrender.com'
+    : 'http://localhost:8000';
 // Platform-specific limits and requirements
 const PLATFORM_LIMITS = {
     'Twitter': { chars: 280, tags: 2, image: '1200x675', imageRequired: false, description: 'Short & punchy' },
@@ -130,8 +135,7 @@ const ContentGenerator = ({ businessId, business, onGenerate }) => {
                         business_id: businessId
                     });
                     if (audioRes.data.filename) {
-                        const host = window.location.hostname;
-                        finalPost.audio_url = `http://${host}:8000/api/audio/${audioRes.data.filename}`;
+                        finalPost.audio_url = `${API_BASE_URL}/api/audio/${audioRes.data.filename}`;
                     }
                 } catch (e) {
                     console.log('Audio generation failed, continuing without audio');

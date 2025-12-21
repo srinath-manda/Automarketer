@@ -2,6 +2,11 @@ import React from 'react';
 import api from '../api';
 import socialShare from '../utils/socialShare';
 
+// Determine if we're in production or development
+const isProduction = window.location.hostname !== 'localhost';
+const API_BASE_URL = isProduction
+    ? 'https://automarketer-backend-2mz4.onrender.com'
+    : 'http://localhost:8000';
 const PLATFORMS = [
     { id: 'twitter', name: 'Twitter', icon: '🐦' },
     { id: 'linkedin', name: 'LinkedIn', icon: '💼' },
@@ -308,8 +313,7 @@ const PostCard = ({ post, onDelete }) => {
         setLoading({ ...loading, audio: true });
         try {
             const res = await api.post('/audio', { text: post.content, business_id: post.business_id });
-            const host = window.location.hostname;
-            setAudioUrl(`http://${host}:8000/api/audio/${res.data.filename}`);
+            setAudioUrl(`${API_BASE_URL}/api/audio/${res.data.filename}`);
         } catch (e) { console.error(e); }
         setLoading({ ...loading, audio: false });
     };
@@ -326,9 +330,8 @@ const PostCard = ({ post, onDelete }) => {
                 image_url: post.image_url
             });
             if (res.data.success) {
-                const host = window.location.hostname;
-                const fullVideoUrl = `http://${host}:8000${res.data.video_url}`;
-                const fullAudioUrl = `http://${host}:8000${res.data.audio_url}`;
+                const fullVideoUrl = `${API_BASE_URL}${res.data.video_url}`;
+                const fullAudioUrl = `${API_BASE_URL}${res.data.audio_url}`;
 
                 setVideoUrl(fullVideoUrl);
                 setAudioUrl(fullAudioUrl);

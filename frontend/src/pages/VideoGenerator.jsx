@@ -2,6 +2,11 @@ import React, { useState, useEffect } from 'react';
 import api from '../api';
 import { Video, Sparkles, Share2, Download, Loader2 } from 'lucide-react';
 
+// Determine if we're in production or development
+const isProduction = window.location.hostname !== 'localhost';
+const API_BASE_URL = isProduction
+    ? 'https://automarketer-backend-2mz4.onrender.com'
+    : 'http://localhost:8000';
 const VideoGenerator = () => {
     const [business, setBusiness] = useState(null);
     const [topic, setTopic] = useState('');
@@ -39,11 +44,10 @@ const VideoGenerator = () => {
             });
 
             if (res.data.success) {
-                const host = window.location.hostname;
                 setVideoData({
                     ...res.data,
-                    video_url: `http://${host}:8000${res.data.video_url}`,
-                    audio_url: `http://${host}:8000${res.data.audio_url}`
+                    video_url: `${API_BASE_URL}${res.data.video_url}`,
+                    audio_url: `${API_BASE_URL}${res.data.audio_url}`
                 });
             } else {
                 setError(res.data.error || 'Video generation failed');

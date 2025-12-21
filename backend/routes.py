@@ -625,7 +625,8 @@ def publish_to_platform():
     if not platform or not content:
         return jsonify({'error': 'Platform and content required'}), 400
     
-    result = publish_content(platform, content, image_url, extra_data)
+    video_url = data.get('video_url')
+    result = publish_content(platform, content, image_url, video_url, extra_data)
     
     # Update the content record if content_id provided
     if content_id and result.get('success'):
